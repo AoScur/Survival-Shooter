@@ -10,6 +10,8 @@ public class Gun : MonoBehaviour
     [SerializeField]
     private GunData gunData;
     public Transform gunBarrelEnd;
+    public ParticleSystem gunParticles;
+    public ParticleSystem hitParticles;
 
     private void Awake()
     {
@@ -46,9 +48,10 @@ public class Gun : MonoBehaviour
     {
         // 라인 렌더러를 활성화하여 총알 궤적을 그린다
         bulletLineRenderer.enabled = true;
-        gunData.GunParticles.Play();
+        gunParticles.Play();
         //if (hit)
-        //gunData.HitParticles.Play();
+        hitParticles.transform.position = hitPosition;
+        hitParticles.Play();
 
         gunAudioPlayer.PlayOneShot(gunData.shotClip);
         bulletLineRenderer.SetPosition(0, gunBarrelEnd.position);
