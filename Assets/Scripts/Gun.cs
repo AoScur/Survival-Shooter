@@ -65,11 +65,13 @@ public class Gun : MonoBehaviour
         if (Physics.Raycast(ray, out RaycastHit hit, gunData.fireDistance))
         {
             hitPos = hit.point;
-            //var target = hit.collider.GetComponent<CapsuleCollider>();
-            //if (target != null)
-            //{
-            //    hit.OnDamage(gunData.damage, hitPos, hit.normal);
-            //}
+            var collider = hit.collider.GetComponent<CapsuleCollider>();
+            Zom target = hit.collider.GetComponent<Zom>();
+            if (collider != null)
+            {
+                target.OnDamage(gunData.damage, hitPos, hit.normal);
+                Debug.Log(collider.name);
+            }
         }
         else
         {
