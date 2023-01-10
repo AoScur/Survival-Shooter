@@ -1,9 +1,4 @@
-using System.Runtime.CompilerServices;
-using UnityEditor;
 using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine.UIElements;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -15,7 +10,7 @@ public class PlayerMovement : MonoBehaviour
 
     private PlayerInput playerInput;
     private Animator playerAnimator;
-    
+
     void Start()
     {
         playerInput = GetComponent<PlayerInput>();
@@ -45,7 +40,7 @@ public class PlayerMovement : MonoBehaviour
         var dir = forward * playerInput.moveV;
         dir += right * playerInput.moveH;
 
-        if(dir.magnitude > 1)
+        if (dir.magnitude > 1)
         {
             dir.Normalize();
         }
@@ -60,7 +55,7 @@ public class PlayerMovement : MonoBehaviour
         RaycastHit hit;
         var ray = camera.ScreenPointToRay(Input.mousePosition);
 
-        if(Physics.Raycast(ray, out hit, Mathf.Infinity, LayerMask.GetMask("Ground")))
+        if (Physics.Raycast(ray, out hit, Mathf.Infinity, LayerMask.GetMask("Ground")))
         {
             var forward = hit.point - transform.position;
             forward.y = 0;

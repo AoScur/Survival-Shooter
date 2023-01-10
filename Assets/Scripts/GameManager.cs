@@ -1,14 +1,41 @@
-using System.Collections;
-using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    private bool isPause = false;
+    public bool isPause = false;
+
+    private static GameManager m_instance;
+    public static GameManager Instance
+    {
+        get
+        {
+            if (m_instance == null)
+                m_instance = FindObjectOfType<GameManager>();
+
+            return m_instance;
+        }
+    }
+
+    [SerializeField]
+    private GameObject pausePanel;
+    [SerializeField]
+    private Slider bgmVolume;
+    [SerializeField]
+    private Slider fxSoundVolume;
+    [SerializeField]
+    private TextMeshProUGUI scoreText;
+    private int score = 0;
+    private AudioSource bgm;
+    private AudioSource fxSound;
 
     void Start()
     {
-        
+        pausePanel.SetActive(false);
+        bgm = GetComponent<AudioSource>();
+        fxSound = GameObject.FindWithTag("Player").GetComponent<AudioSource>();
     }
 
     void Update()
@@ -20,6 +47,44 @@ public class GameManager : MonoBehaviour
             else
                 Time.timeScale = 0f;
             isPause = !isPause;
+            pausePanel.SetActive(isPause);
         }
     }
+
+    public void SetMusicVolume()
+    {
+        bgm.volume = bgmVolume.value;
+    }
+
+    public void SetFxVolume()
+    {
+        fxSound.volume = fxSoundVolume.value;
+    }
+
+    public void ResumeButton()
+    {
+        isPause = false;
+        Time.timeScale = 1f;
+        pausePanel.SetActive(false);
+    }
+
+    public void QuitButton()
+    {
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+        Application.Quit();
+#endif
+    }
+
+    public void UpdateScoreText(int newScore)
+    {
+        score += newScore;
+        scoreText.text = "SCORE : " + score;
+    }
+
+    //private void GameRestart()
+    //{
+    //    SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    //}
 }
