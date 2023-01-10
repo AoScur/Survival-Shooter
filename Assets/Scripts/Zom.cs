@@ -95,7 +95,7 @@ public class Zom : LivingEntity
     {
         base.Die();
 
-
+        Debug.Log("die function");
         pathFinder.isStopped = true;
         pathFinder.enabled = false;
 
@@ -126,6 +126,16 @@ public class Zom : LivingEntity
             var hitNormal = (transform.position - other.transform.position).normalized;
 
             attackTarget.OnDamage(damage, hitPoint, hitNormal);
+        }
+    }
+
+    private IEnumerator StartSinking()
+    {
+        Debug.Log("StartSinking");
+        while (transform.position.y > -3)
+        {
+            transform.Translate(Vector3.down * Time.deltaTime);
+            yield return null;
         }
     }
 }
