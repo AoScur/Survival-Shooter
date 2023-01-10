@@ -6,7 +6,7 @@ using UnityEngine;
 public class LivingEntity : MonoBehaviour, IDamageable
 {
     public float startingHealth = 100f;
-    [field:SerializeField]
+    [field: SerializeField]
     public float health { get; protected set; }
     [field: SerializeField]
     public bool dead { get; protected set; }
@@ -26,7 +26,7 @@ public class LivingEntity : MonoBehaviour, IDamageable
 
     public virtual void Die()
     {
-        if(onDeath!=null)
+        if (onDeath != null)
         {
             onDeath();
         }
@@ -34,11 +34,11 @@ public class LivingEntity : MonoBehaviour, IDamageable
         dead = true;
     }
 
-    public void OnDamage(float damage,Vector3 hitPoint, Vector3 hitNormal)
+    public void OnDamage(float damage, Vector3 hitPoint, Vector3 hitNormal)
     {
-        health= damage;
+        health = damage;
 
-        if(health<=0&&!dead)
+        if (health <= 0 && !dead)
         {
             Die();
         }
@@ -46,7 +46,7 @@ public class LivingEntity : MonoBehaviour, IDamageable
 
     public virtual void RestoreHealth(float newHealth)
     {
-        if(dead)
+        if (dead)
         {
             return;
         }

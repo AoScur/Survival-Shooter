@@ -25,13 +25,12 @@ public class Gun : MonoBehaviour
         gunFlash.enabled = false;
     }
 
-    void Start()
-    {
-    }
-
     // Update is called once per frame
     void Update()
     {
+        if (GameManager.Instance.isPause)
+            return;
+
         if (timer > 0f)
         {
             timer -= Time.deltaTime;
