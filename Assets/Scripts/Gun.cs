@@ -67,7 +67,7 @@ public class Gun : MonoBehaviour
             hitPos = hit.point;
             var collider = hit.collider.GetComponent<CapsuleCollider>();
             Zom target = hit.collider.GetComponent<Zom>();
-            if (collider != null)
+            if (collider != null && target != null)
             {
                 target.OnDamage(gunData.damage, hitPos, hit.normal);
                 Debug.Log(collider.name);

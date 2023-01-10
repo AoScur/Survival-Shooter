@@ -1,6 +1,6 @@
 using TMPro;
+using System.Collections;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
@@ -27,6 +27,8 @@ public class GameManager : MonoBehaviour
     private Slider fxSoundVolume;
     [SerializeField]
     private TextMeshProUGUI scoreText;
+    [SerializeField]
+    private GameObject hitEffect;
     private int score = 0;
     private AudioSource bgm;
     private AudioSource fxSound;
@@ -34,6 +36,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         pausePanel.SetActive(false);
+        hitEffect.SetActive(false);
         bgm = GetComponent<AudioSource>();
         fxSound = GameObject.FindWithTag("Player").GetComponent<AudioSource>();
     }
@@ -49,6 +52,18 @@ public class GameManager : MonoBehaviour
             isPause = !isPause;
             pausePanel.SetActive(isPause);
         }
+        // test code
+        if (Input.GetKeyDown(KeyCode.H))
+        {
+            StartCoroutine(HitEffect());
+        }
+    }
+
+    private IEnumerator HitEffect()
+    {
+        hitEffect.SetActive(true);
+        yield return new WaitForSeconds(0.1f);
+        hitEffect.SetActive(false);
     }
 
     public void SetMusicVolume()
