@@ -11,7 +11,6 @@ public class Gun : MonoBehaviour
     private GunData gunData;
     public Transform gunBarrelEnd;
     public ParticleSystem gunParticles;
-    public ParticleSystem hitParticles;
     public Light gunFlash;
 
     private void Awake()
@@ -49,9 +48,6 @@ public class Gun : MonoBehaviour
         bulletLineRenderer.enabled = true;
         gunParticles.Play();
         gunFlash.enabled = true;
-        //if (hit)
-        hitParticles.transform.position = hitPosition;
-        hitParticles.Play();
 
         gunAudioPlayer.PlayOneShot(gunData.shotClip);
         bulletLineRenderer.SetPosition(0, gunBarrelEnd.position);
@@ -72,7 +68,7 @@ public class Gun : MonoBehaviour
             //var target = hit.collider.GetComponent<CapsuleCollider>();
             //if (target != null)
             //{
-            //    target.OnDamage(gunData.damage, hitPos, hit.normal);
+            //    hit.OnDamage(gunData.damage, hitPos, hit.normal);
             //}
         }
         else
