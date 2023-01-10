@@ -16,7 +16,7 @@ public class Zom : LivingEntity
 
     public ParticleSystem hurtEffect;
     private Animator zomAnimator;
-   // private Renderer zomRenderer;
+    // private Renderer zomRenderer;
 
     public float damage = 20f;
     public float timeBetAttack = 0.5f;
@@ -40,45 +40,45 @@ public class Zom : LivingEntity
 
     private void Start()
     {
-       StartCoroutine(UpdatePath());
+        StartCoroutine(UpdatePath());
     }
 
     private void Update()
     {
-       zomAnimator.SetBool("HasTarget", hasTarget);
+        zomAnimator.SetBool("HasTarget", hasTarget);
     }
 
     private IEnumerator UpdatePath()
     {
-        while(!dead)
+        while (!dead)
         {
-            if(hasTarget)
+            if (hasTarget)
             {
                 pathFinder.isStopped = false;
                 pathFinder.SetDestination(targetEntity.transform.position);
             }
             else
             {
-                pathFinder.isStopped=true;
+                pathFinder.isStopped = true;
 
                 var colliders = Physics.OverlapSphere(transform.position, 20f, whatIsTarget);
-                foreach(var collider in colliders)
+                foreach (var collider in colliders)
                 {
                     var entity = collider.GetComponent<LivingEntity>();
-                    if(entity !=null)
+                    if (entity != null)
                     {
                         targetEntity = entity;
                         break;
                     }
                 }
             }
-        yield return new WaitForSeconds(0.25f);
+            yield return new WaitForSeconds(0.25f);
         }
     }
 
     public override void OnDamage(float damage, Vector3 hitPoint, Vector3 hitNormal)
     {
-        if(dead)
+        if (dead)
         {
             return;
         }
@@ -119,7 +119,7 @@ public class Zom : LivingEntity
 
         var attackTarget = other.GetComponent<LivingEntity>();
 
-        if(attackTarget != null&& attackTarget == targetEntity)
+        if (attackTarget != null && attackTarget == targetEntity)
         {
             lastAttackTime = Time.time;
             var hitPoint = other.ClosestPoint(transform.position);

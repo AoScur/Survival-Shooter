@@ -33,10 +33,9 @@ public class LivingEntity : MonoBehaviour, IDamageable
 
         dead = true;
     }
-
     public virtual void OnDamage(float damage, Vector3 hitPoint, Vector3 hitNormal)
     {
-        health = damage;
+        health -= damage;
 
         if (health <= 0 && !dead)
         {
