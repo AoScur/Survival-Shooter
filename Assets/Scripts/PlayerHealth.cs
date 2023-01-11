@@ -33,7 +33,6 @@ public class PlayerHealth : LivingEntity
 
     public override void OnDamage(float damage, Vector3 hitPoint, Vector3 hitDirection)
     {
-        // LivingEntity의 OnDamage() 실행(데미지 적용)
         if (dead)
             return;
 

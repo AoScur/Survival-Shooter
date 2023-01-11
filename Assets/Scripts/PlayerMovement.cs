@@ -47,7 +47,6 @@ public class PlayerMovement : MonoBehaviour
         var delta = dir * moveSpeed * Time.deltaTime;
 
         transform.position += delta;
-        camera.transform.position += delta;
     }
 
     private void Rotate()
