@@ -4,11 +4,12 @@ using UnityEngine;
 public class Gun : MonoBehaviour
 {
     private AudioSource gunAudioPlayer;
-    private LineRenderer bulletLineRenderer;
     private float timer = 0f;
 
     [SerializeField]
     private GunData gunData;
+    public LineRenderer singleShotLineRender;
+    public LineRenderer multiShotLineRender;
     public Transform gunBarrelEnd;
     public ParticleSystem gunParticles;
     public Light gunFlash;
@@ -17,9 +18,12 @@ public class Gun : MonoBehaviour
     {
         gunAudioPlayer = GetComponent<AudioSource>();
 
-        bulletLineRenderer = GetComponent<LineRenderer>();
-        bulletLineRenderer.positionCount = 2;
-        bulletLineRenderer.enabled = false;
+        singleShotLineRender.positionCount = 2;
+        singleShotLineRender.enabled = false;
+
+        multiShotLineRender.positionCount = 2;
+        multiShotLineRender.enabled = false;
+        multiShotLineRender.endWidth = 10f;
 
         gunFlash.enabled = false;
     }
@@ -38,27 +42,48 @@ public class Gun : MonoBehaviour
 
         if (Input.GetMouseButton(0))
         {
-            Shot();
+            SingleShot();
             timer = gunData.timeBetFire;
+        }
+
+        if (Input.GetMouseButton(1))
+        {
+            MultiShot();
+            timer = gunData.timeBetFire * 15;
         }
     }
 
-    private IEnumerator ShotEffect(Vector3 hitPosition)
+    private IEnumerator SingleShotEffect(Vector3 hitPosition)
     {
-        bulletLineRenderer.enabled = true;
+        singleShotLineRender.enabled = true;
         gunParticles.Play();
         gunFlash.enabled = true;
 
         gunAudioPlayer.PlayOneShot(gunData.shotClip);
-        bulletLineRenderer.SetPosition(0, gunBarrelEnd.position);
-        bulletLineRenderer.SetPosition(1, hitPosition);
+        singleShotLineRender.SetPosition(0, gunBarrelEnd.position);
+        singleShotLineRender.SetPosition(1, hitPosition);
 
         yield return new WaitForSeconds(0.03f);
-        bulletLineRenderer.enabled = false;
+        singleShotLineRender.enabled = false;
         gunFlash.enabled = false;
     }
 
-    private void Shot()
+    private IEnumerator MultiShotEffect(Vector3 hitPosition)
+    {
+        multiShotLineRender.enabled = true;
+        gunParticles.Play();
+        gunFlash.enabled = true;
+
+        gunAudioPlayer.PlayOneShot(gunData.shotClip);
+        multiShotLineRender.SetPosition(0, gunBarrelEnd.position);
+        multiShotLineRender.SetPosition(1, hitPosition);
+
+        yield return new WaitForSeconds(0.03f);
+        multiShotLineRender.enabled = false;
+        gunFlash.enabled = false;
+    }
+
+    private void SingleShot()
     {
         Vector3 hitPos;
         Ray ray = new(gunBarrelEnd.position, gunBarrelEnd.forward);
@@ -77,6 +102,26 @@ public class Gun : MonoBehaviour
         {
             hitPos = gunBarrelEnd.position + gunBarrelEnd.forward * gunData.fireDistance;
         }
-        StartCoroutine(ShotEffect(hitPos));
+        StartCoroutine(SingleShotEffect(hitPos));
+    }
+
+    private void MultiShot()
+    {
+        Debug.Log(multiShotLineRender.endWidth);
+
+        Vector3 hitPos;
+        Ray ray = new(gunBarrelEnd.position, gunBarrelEnd.forward);
+        hitPos = gunBarrelEnd.position + gunBarrelEnd.forward * gunData.multiDistance;
+        if (Physics.Raycast(ray, out RaycastHit hit, gunData.multiDistance))
+        {
+            var collider = hit.collider.GetComponent<CapsuleCollider>();
+            Zom target = hit.collider.GetComponent<Zom>();
+            if (collider != null && target != null)
+            {
+                target.OnDamage(gunData.damage, hitPos, hit.normal);
+                Debug.Log(collider.name);
+            }
+        }
+        StartCoroutine(MultiShotEffect(hitPos));
     }
 }

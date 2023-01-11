@@ -6,5 +6,6 @@ public class GunData : ScriptableObject
     public AudioClip shotClip;
     public float damage = 25;
     public float fireDistance = 50f;
+    public float multiDistance = 10f;
     public float timeBetFire = 0.12f;
 }
